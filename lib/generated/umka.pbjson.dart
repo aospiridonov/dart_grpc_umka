@@ -55,3 +55,14 @@ const Evaluation$json = const {
 
 /// Descriptor for `Evaluation`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List evaluationDescriptor = $convert.base64Decode('CgpFdmFsdWF0aW9uEg4KAmlkGAEgASgFUgJpZBIaCghhbnN3ZXJJZBgCIAEoBVIIYW5zd2VySWQSEgoEbWFyaxgDIAEoBVIEbWFyaw==');
+@$core.Deprecated('Use answeredQuestionDescriptor instead')
+const AnsweredQuestion$json = const {
+  '1': 'AnsweredQuestion',
+  '2': const [
+    const {'1': 'question', '3': 1, '4': 1, '5': 11, '6': '.Question', '10': 'question'},
+    const {'1': 'answer', '3': 2, '4': 1, '5': 9, '10': 'answer'},
+  ],
+};
+
+/// Descriptor for `AnsweredQuestion`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List answeredQuestionDescriptor = $convert.base64Decode('ChBBbnN3ZXJlZFF1ZXN0aW9uEiUKCHF1ZXN0aW9uGAEgASgLMgkuUXVlc3Rpb25SCHF1ZXN0aW9uEhYKBmFuc3dlchgCIAEoCVIGYW5zd2Vy');

@@ -299,3 +299,66 @@ class Evaluation extends $pb.GeneratedMessage {
   void clearMark() => clearField(3);
 }
 
+class AnsweredQuestion extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'AnsweredQuestion', createEmptyInstance: create)
+    ..aOM<Question>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'question', subBuilder: Question.create)
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'answer')
+    ..hasRequiredFields = false
+  ;
+
+  AnsweredQuestion._() : super();
+  factory AnsweredQuestion({
+    Question? question,
+    $core.String? answer,
+  }) {
+    final _result = create();
+    if (question != null) {
+      _result.question = question;
+    }
+    if (answer != null) {
+      _result.answer = answer;
+    }
+    return _result;
+  }
+  factory AnsweredQuestion.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory AnsweredQuestion.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  AnsweredQuestion clone() => AnsweredQuestion()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  AnsweredQuestion copyWith(void Function(AnsweredQuestion) updates) => super.copyWith((message) => updates(message as AnsweredQuestion)) as AnsweredQuestion; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static AnsweredQuestion create() => AnsweredQuestion._();
+  AnsweredQuestion createEmptyInstance() => create();
+  static $pb.PbList<AnsweredQuestion> createRepeated() => $pb.PbList<AnsweredQuestion>();
+  @$core.pragma('dart2js:noInline')
+  static AnsweredQuestion getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AnsweredQuestion>(create);
+  static AnsweredQuestion? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  Question get question => $_getN(0);
+  @$pb.TagNumber(1)
+  set question(Question v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasQuestion() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearQuestion() => clearField(1);
+  @$pb.TagNumber(1)
+  Question ensureQuestion() => $_ensure(0);
+
+  @$pb.TagNumber(2)
+  $core.String get answer => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set answer($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasAnswer() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearAnswer() => clearField(2);
+}
+

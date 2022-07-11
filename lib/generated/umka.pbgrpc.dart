@@ -22,6 +22,12 @@ class UmkaClient extends $grpc.Client {
       '/Umka/sendAnswer',
       ($0.Answer value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.Evaluation.fromBuffer(value));
+  static final _$getTutorial =
+      $grpc.ClientMethod<$0.Student, $0.AnsweredQuestion>(
+          '/Umka/getTutorial',
+          ($0.Student value) => value.writeToBuffer(),
+          ($core.List<$core.int> value) =>
+              $0.AnsweredQuestion.fromBuffer(value));
 
   UmkaClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -36,6 +42,13 @@ class UmkaClient extends $grpc.Client {
   $grpc.ResponseFuture<$0.Evaluation> sendAnswer($0.Answer request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$sendAnswer, request, options: options);
+  }
+
+  $grpc.ResponseStream<$0.AnsweredQuestion> getTutorial($0.Student request,
+      {$grpc.CallOptions? options}) {
+    return $createStreamingCall(
+        _$getTutorial, $async.Stream.fromIterable([request]),
+        options: options);
   }
 }
 
@@ -57,6 +70,13 @@ abstract class UmkaServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.Answer.fromBuffer(value),
         ($0.Evaluation value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.Student, $0.AnsweredQuestion>(
+        'getTutorial',
+        getTutorial_Pre,
+        false,
+        true,
+        ($core.List<$core.int> value) => $0.Student.fromBuffer(value),
+        ($0.AnsweredQuestion value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.Question> getQuestion_Pre(
@@ -69,8 +89,15 @@ abstract class UmkaServiceBase extends $grpc.Service {
     return sendAnswer(call, await request);
   }
 
+  $async.Stream<$0.AnsweredQuestion> getTutorial_Pre(
+      $grpc.ServiceCall call, $async.Future<$0.Student> request) async* {
+    yield* getTutorial(call, await request);
+  }
+
   $async.Future<$0.Question> getQuestion(
       $grpc.ServiceCall call, $0.Student request);
   $async.Future<$0.Evaluation> sendAnswer(
       $grpc.ServiceCall call, $0.Answer request);
+  $async.Stream<$0.AnsweredQuestion> getTutorial(
+      $grpc.ServiceCall call, $0.Student request);
 }

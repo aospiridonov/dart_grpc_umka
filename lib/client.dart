@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:grpc/grpc.dart';
 import 'package:umka/generated/umka.pbgrpc.dart';
 
@@ -20,8 +22,26 @@ class UmkaTerminalClient {
     return question;
   }
 
+  Future<void> sendAnswer(Student student, Question question) async {
+    final answer = Answer()
+      ..question = question
+      ..student = student;
+    print('Enter your answer:');
+    answer.text = stdin.readLineSync()!;
+    final evaluation = await stub.sendAnswer(answer);
+    print('Evaluation for the answer: ${answer.text} '
+        '\non the question ${question.text}:'
+        '\n$evaluation');
+  }
+
+  Future<void> takeTutorial(Student student) async {
+    await for (var answeredQuestion in stub.getTutorial(student)) {
+      print(answeredQuestion);
+    }
+  }
+
   Future<void> callService(Student student) async {
-    await getQuestion(student);
+    await takeTutorial(student);
     await channel.shutdown();
   }
 }

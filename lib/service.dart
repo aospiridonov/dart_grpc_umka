@@ -13,9 +13,29 @@ class UmkaService extends UmkaServiceBase {
   }
 
   @override
-  Future<Evaluation> sendAnswer(ServiceCall call, Answer request) {
-    // TODO: implement sendAnswer
-    throw UnimplementedError();
+  Future<Evaluation> sendAnswer(ServiceCall call, Answer request) async {
+    print('Received answer for the question: $request');
+    final correctAnswer = getCorrectAnswerById(request.question.id);
+    if (correctAnswer == null) {
+      throw grpc.GrpcError.invalidArgument('Invalid question id!');
+    }
+    final evaluation = Evaluation()
+      ..id = 1
+      ..answerId = request.id
+      ..mark = (correctAnswer == request.text ? 5 : 2);
+    return evaluation;
+  }
+
+  @override
+  Stream<AnsweredQuestion> getTutorial(
+      ServiceCall call, Student request) async* {
+    for (var question in questionsDb) {
+      final answeredQuestion = AnsweredQuestion()
+        ..question = question
+        ..answer = getCorrectAnswerById(question.id)!;
+      yield answeredQuestion;
+      await Future.delayed(Duration(seconds: 2));
+    }
   }
 }
 
