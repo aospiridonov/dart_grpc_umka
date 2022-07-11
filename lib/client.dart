@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:grpc/grpc.dart';
@@ -40,8 +41,44 @@ class UmkaTerminalClient {
     }
   }
 
+  Future<Evaluation> takeExam(Student student) async {
+    final exam = await stub.getExam(student);
+    final questions = exam.questions;
+    final answerStream = StreamController<Answer>();
+    final evaluationFuture = stub.takeExam(
+      answerStream.stream,
+      options: CallOptions(metadata: {'student_name': student.name}),
+    );
+    for (var question in questions) {
+      final answer = Answer()
+        ..question = question
+        ..student = student;
+      print('Enter the answer for the question: ${question.text}');
+      answer.text = stdin.readLineSync()!;
+      answerStream.add(answer);
+      await Future.delayed(Duration(milliseconds: 1));
+    }
+    unawaited(answerStream.close());
+    return evaluationFuture;
+  }
+
+  Future<void> techInterview(String candidateName) async {
+    final candidateStream = StreamController<InterviewMessage>();
+    final interviewerStream = stub.techInterview(candidateStream.stream);
+    candidateStream.add(InterviewMessage()
+      ..name = candidateName
+      ..body = 'I am ready!');
+    await for (var message in interviewerStream) {
+      print('\nMessage from the ${message.name}:\n${message.body}\n');
+      print('Enter your answer:');
+      final answer = stdin.readLineSync()!;
+      candidateStream.add(InterviewMessage()..body = answer);
+    }
+    unawaited(candidateStream.close());
+  }
+
   Future<void> callService(Student student) async {
-    await takeTutorial(student);
+    await techInterview(student.name);
     await channel.shutdown();
   }
 }

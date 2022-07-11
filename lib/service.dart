@@ -37,7 +37,58 @@ class UmkaService extends UmkaServiceBase {
       await Future.delayed(Duration(seconds: 2));
     }
   }
+
+  @override
+  Future<Exam> getExam(ServiceCall call, Student request) async => Exam()
+    ..id = 1
+    ..questions.addAll(questionsDb);
+
+  @override
+  Future<Evaluation> takeExam(ServiceCall call, Stream<Answer> request) async {
+    var score = 0;
+    await for (var answer in request) {
+      final isCorrect = getCorrectAnswerById(answer.question.id) == answer.text;
+      print('Received an answer from ${answer.student.name}\n'
+          'for a question: ${answer.question.text}'
+          'answer: ${answer.text} is correct: $isCorrect');
+      if (isCorrect) {
+        score++;
+      }
+    }
+
+    print('The student: ${call.clientMetadata?['student_name']}'
+        ' finished exam with the score: $score');
+    return Evaluation()
+      ..id = 1
+      ..mark = score;
+  }
+
+  InterviewMessage _createMessage(String text, {String name = 'Interviewer'}) =>
+      InterviewMessage()
+        ..name = name
+        ..body = text;
+
+  @override
+  Stream<InterviewMessage> techInterview(
+      ServiceCall call, Stream<InterviewMessage> request) async* {
+    var count = 0;
+    await for (var message in request) {
+      print('Candidate ${message.name} message: ${message.body}');
+      if (count >= interviewQuestions.length) {
+        return;
+      } else {
+        yield _createMessage(interviewQuestions[count++]);
+      }
+    }
+  }
 }
+
+const interviewQuestions = [
+  'What was wrong in your previous job place?',
+  'Why do you want to work for Us?',
+  'Who do you see yourself in 5 years?',
+  'We will inform you about the decision. Bye!',
+];
 
 class Server {
   Future<void> run() async {
